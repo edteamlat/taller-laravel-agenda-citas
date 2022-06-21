@@ -17,8 +17,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::view('about', 'about');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/my-schedule', function () {
+    return view('my-schedule.index');
+})->middleware(['auth'])->name('my-schedule');
 
 require __DIR__.'/auth.php';
