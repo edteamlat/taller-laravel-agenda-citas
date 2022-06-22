@@ -24,16 +24,15 @@
                             <x-calendar></x-calendar>
                         </div>
                         <div class="w-2/3 py-8 px-5">
-                            <h3 class="font-bold text-lg">Mis citas para {{ $date }}</h3>
+                            <h3 class="font-bold text-lg">Mis citas para: {{ $date->isoFormat('dddd Do MMMM YYYY') }}</h3>
 
-                            <div class="mt-2 bg-indigo-100 p-3 rounded">
-                                <div>Corte de cabello con Jane</div>
-                                <div>Desde <span class="font-bold">10:00</span> hasta <span class="font-bold">10:30</span></div>
-                            </div>
-                            <div class="mt-2 bg-indigo-100 p-3 rounded">
-                                <div>Corte de cabello con Jane</div>
-                                <div>Desde <span class="font-bold">10:00</span> hasta <span class="font-bold">10:30</span></div>
-                            </div>
+                            @foreach ($dayScheduler as $schedule)
+                                <div class="mt-2 bg-indigo-100 p-3 rounded">
+                                    <div>{{ $schedule->service->name }} con {{ $schedule->staffUser->name }}</div>
+                                    <div>Desde <span class="font-bold">{{ $schedule->from->format('H:i') }}</span> hasta <span class="font-bold">{{ $schedule->to->format('H:i') }}</span></div>
+                                </div>
+                            @endforeach
+
                         </div>
                     </div>
 
