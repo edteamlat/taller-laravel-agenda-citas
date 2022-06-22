@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MyScheduleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,12 +20,15 @@ Route::get('/', function () {
 
 Route::view('about', 'about');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::middleware('auth')->group(function () {
 
-Route::get('/my-schedule', function () {
-    return view('my-schedule.index');
-})->middleware(['auth'])->name('my-schedule');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    Route::get('/my-schedule', [MyScheduleController::class, 'index'])
+        ->name('my-schedule');
+
+});
 
 require __DIR__.'/auth.php';
