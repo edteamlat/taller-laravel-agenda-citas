@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Business\StaffServiceChecker;
+use App\Business\StaffAvailabilityChecker;
+use App\Business\ClientAvailabilityChecker;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MyScheduleRequest extends FormRequest
@@ -29,5 +32,23 @@ class MyScheduleRequest extends FormRequest
             'staff_user_id' => 'required|exists:users,id',
             'service_id' => 'required|exists:services,id',
         ];
+    }
+
+    public function checkReservationRules($staffUser, $clientUser, $from, $to, $service)
+    {
+        if (!(new StaffAvailabilityChecker($staffUser, $from, $to))
+            ->check()) {
+            abort(back()->withErrors('Este horario no está disponible.')->withInput());
+        }
+
+        if (!(new ClientAvailabilityChecker($clientUser, $from, $to))
+            ->check()) {
+            abort(back()->withErrors('Ya tienes una reservación en este horario.')->withInput());
+        }
+
+        if (!(new StaffServiceChecker($staffUser, $service))
+            ->check()) {
+            abort(back()->withErrors("{$staffUser->name} no presta el servicio de {$service->name}.")->withInput());
+        }
     }
 }

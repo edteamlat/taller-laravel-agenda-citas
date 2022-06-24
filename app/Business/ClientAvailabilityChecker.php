@@ -6,24 +6,24 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Scheduler;
 
-class StaffAvailabilityChecker
+class ClientAvailabilityChecker
 {
-    protected $staffUser;
+    protected $clientUser;
 
     protected $from;
 
     protected $to;
 
-    public function __construct(User $staffUser, Carbon $from, Carbon $to)
+    public function __construct(User $clientUser, Carbon $from, Carbon $to)
     {
-        $this->staffUser = $staffUser;
+        $this->clientUser = $clientUser;
         $this->from = $from;
         $this->to = $to;
     }
 
     public function check()
     {
-        return ! Scheduler::where('staff_user_id', $this->staffUser->id)
+        return !Scheduler::where('client_user_id', $this->clientUser->id)
             ->where('from', '<', $this->to)
             ->where('to', '>', $this->from)
             ->exists();
