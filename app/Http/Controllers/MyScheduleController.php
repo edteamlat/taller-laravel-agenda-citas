@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Service;
 use App\Models\Scheduler;
 use Illuminate\Http\Request;
+use App\Http\Requests\MyScheduleRequest;
+use App\Business\StaffAvailabilityChecker;
 
 class MyScheduleController extends Controller
 {
@@ -37,11 +39,17 @@ class MyScheduleController extends Controller
         ]);
     }
 
-    public function store()
+    public function store(MyScheduleRequest $request)
     {
         $service = Service::find(request('service_id'));
         $from = Carbon::parse(request('from.date') . ' ' . request('from.time'));
-        $to = $from->toImmutable()->addMinutes($service->duration);
+        $to = Carbon::parse($from)->addMinutes($service->duration);
+        $staffUser = User::find($request->input('staff_user_id'));
+
+        if(! (new StaffAvailabilityChecker($staffUser, $from, $to))
+            ->check()) {
+            abort(back()->withErrors('Este horario no está disponible.')->withInput());
+        }
 
         Scheduler::create([
             'from' => $from,
