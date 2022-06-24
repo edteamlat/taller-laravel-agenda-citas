@@ -33,9 +33,9 @@
                                 </div>
                             @endforeach
 
+                            <x-link class="mt-2" href="{{ route('my-schedule.create', ['date' => $date->format('Y-m-d')]) }}">Reservar cita</x-link>
                         </div>
                     </div>
-
 
 
 

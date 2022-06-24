@@ -29,6 +29,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-schedule', [MyScheduleController::class, 'index'])
         ->name('my-schedule');
 
+    Route::get('/my-schedule/create', [MyScheduleController::class, 'create'])
+        ->name('my-schedule.create');
+
+    Route::post('/my-schedule', [MyScheduleController::class, 'store'])
+        ->name('my-schedule.store');
+
 });
 
 require __DIR__.'/auth.php';

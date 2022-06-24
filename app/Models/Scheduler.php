@@ -11,6 +11,15 @@ class Scheduler extends Model
 
     protected $table = 'scheduler';
 
+    protected $fillable = [
+        'from',
+        'to',
+        'status',
+        'staff_user_id',
+        'client_user_id',
+        'service_id',
+    ];
+
     protected $dates = [
         'from',
         'to',
