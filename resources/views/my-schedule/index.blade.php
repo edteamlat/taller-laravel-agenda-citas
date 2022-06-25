@@ -25,11 +25,22 @@
                         </div>
                         <div class="w-2/3 py-8 px-5">
                             <h3 class="font-bold text-lg">Mis citas para: {{ $date->isoFormat('dddd Do MMMM YYYY') }}</h3>
-
+                            <x-auth-validation-errors></x-auth-validation-errors>
                             @foreach ($dayScheduler as $schedule)
-                                <div class="mt-2 bg-indigo-100 p-3 rounded">
-                                    <div>{{ $schedule->service->name }} con {{ $schedule->staffUser->name }}</div>
-                                    <div>Desde <span class="font-bold">{{ $schedule->from->format('H:i') }}</span> hasta <span class="font-bold">{{ $schedule->to->format('H:i') }}</span></div>
+                                <div class="flex items-center mt-2 bg-indigo-100 p-3 rounded">
+                                    <div class="w-1/2">
+                                        <div>{{ $schedule->service->name }} con {{ $schedule->staffUser->name }}</div>
+                                        <div>Desde <span class="font-bold">{{ $schedule->from->format('H:i') }}</span> hasta <span class="font-bold">{{ $schedule->to->format('H:i') }}</span></div>
+                                    </div>
+                                    <div>
+                                        @can('delete', $schedule)
+                                            <form method="POST" onsubmit="return confirm('¿Realmente deseas cancelar esta cita?')" action="{{ route('my-schedule.destroy', ['scheduler' => $schedule->id]) }}">
+                                                @method('DELETE')
+                                                @csrf
+                                                <x-button>Cancelar</x-button>
+                                            </form>
+                                        @endcan
+                                    </div>
                                 </div>
                             @endforeach
 

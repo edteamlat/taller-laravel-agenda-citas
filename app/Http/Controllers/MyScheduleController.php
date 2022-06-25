@@ -61,4 +61,14 @@ class MyScheduleController extends Controller
 
         return redirect(route('my-schedule', ['date' => $from->format('Y-m-d')]));
     }
+    public function destroy(Scheduler $scheduler)
+    {
+        if (auth()->user()->cannot('delete', $scheduler)) {
+            return back()->withErrors('No es posible cancelar esta cita');
+        }
+
+        $scheduler->delete();
+
+        return back();
+    }
 }

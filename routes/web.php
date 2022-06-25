@@ -35,6 +35,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/my-schedule', [MyScheduleController::class, 'store'])
         ->name('my-schedule.store');
 
+    Route::delete('/my-schedule/{scheduler}', [MyScheduleController::class, 'destroy'])
+        ->name('my-schedule.destroy');
+
 });
 
 require __DIR__.'/auth.php';
