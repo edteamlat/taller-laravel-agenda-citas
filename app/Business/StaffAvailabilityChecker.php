@@ -8,6 +8,10 @@ use App\Models\Scheduler;
 
 class StaffAvailabilityChecker
 {
+    protected $ignoreScheduler = false;
+
+    protected $scheduler = null;
+
     protected $staffUser;
 
     protected $from;
@@ -21,9 +25,19 @@ class StaffAvailabilityChecker
         $this->to = $to;
     }
 
+    public function ignore($scheduler)
+    {
+        $this->ignoreScheduler = true;
+        $this->scheduler = $scheduler;
+        return $this;
+    }
+
     public function check()
     {
         return ! Scheduler::where('staff_user_id', $this->staffUser->id)
+            ->when($this->ignoreScheduler, function ($query) {
+                $query->where('id', '<>', $this->scheduler->id);
+            })
             ->where('from', '<', $this->to)
             ->where('to', '>', $this->from)
             ->exists();

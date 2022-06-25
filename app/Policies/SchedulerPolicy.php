@@ -53,7 +53,11 @@ class SchedulerPolicy
      */
     public function update(User $user, Scheduler $scheduler)
     {
-        //
+        if ($scheduler->client_user_id != $user->id) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

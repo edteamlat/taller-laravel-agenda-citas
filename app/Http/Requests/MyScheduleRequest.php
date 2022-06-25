@@ -51,4 +51,24 @@ class MyScheduleRequest extends FormRequest
             abort(back()->withErrors("{$staffUser->name} no presta el servicio de {$service->name}.")->withInput());
         }
     }
+
+    public function checkRescheduleRules($scheduler, $staffUser, $clientUser, $from, $to, $service)
+    {
+        if (!(new StaffAvailabilityChecker($staffUser, $from, $to))
+            ->ignore($scheduler)
+            ->check()) {
+            abort(back()->withErrors('Este horario no está disponible.')->withInput());
+        }
+
+        if (!(new ClientAvailabilityChecker($clientUser, $from, $to))
+            ->ignore($scheduler)
+            ->check()) {
+            abort(back()->withErrors('Ya tienes una reservación en este horario.')->withInput());
+        }
+
+        if (!(new StaffServiceChecker($staffUser, $service))
+            ->check()) {
+            abort(back()->withErrors("{$staffUser->name} no presta el servicio de {$service->name}.")->withInput());
+        }
+    }
 }

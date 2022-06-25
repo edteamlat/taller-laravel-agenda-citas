@@ -64,6 +64,10 @@ class MyScheduleController extends Controller
 
     public function edit(Scheduler $scheduler)
     {
+        if (auth()->user()->cannot('update', $scheduler)) {
+            abort(403, 'Acción no autorizada.');
+        }
+
         $services = Service::all();
         $staffUsers = User::role('staff')->get();
 
@@ -72,6 +76,29 @@ class MyScheduleController extends Controller
             'services' => $services,
             'staffUsers' => $staffUsers,
         ]);
+    }
+
+    public function update(Scheduler $scheduler, MyScheduleRequest $request)
+    {
+        if (auth()->user()->cannot('update', $scheduler)) {
+            abort(403, 'Acción no autorizada.');
+        }
+
+        $service = Service::find(request('service_id'));
+        $from = Carbon::parse(request('from.date') . ' ' . request('from.time'));
+        $to = Carbon::parse($from)->addMinutes($service->duration);
+        $staffUser = User::find($request->input('staff_user_id'));
+
+        $request->checkRescheduleRules($scheduler, $staffUser, auth()->user(), $from, $to, $service);
+
+        $scheduler->update([
+            'from' => $from,
+            'to' => $to,
+            'staff_user_id' => request('staff_user_id'),
+            'service_id' => $service->id,
+        ]);
+
+        return redirect(route('my-schedule', ['date' => $from->format('Y-m-d')]));
     }
 
     public function destroy(Scheduler $scheduler)
