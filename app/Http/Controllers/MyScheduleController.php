@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\MyScheduleRequest;
 use App\Business\StaffAvailabilityChecker;
 use App\Business\StaffServiceChecker;
+use App\Notifications\SchedulerCreated;
 
 class MyScheduleController extends Controller
 {
@@ -50,7 +51,7 @@ class MyScheduleController extends Controller
 
         $request->checkReservationRules($staffUser, auth()->user(), $from, $to, $service);
 
-        Scheduler::create([
+        $scheduler = Scheduler::create([
             'from' => $from,
             'to' => $to,
             'status' => 'pending',
@@ -58,6 +59,8 @@ class MyScheduleController extends Controller
             'client_user_id' => auth()->id(),
             'service_id' => $service->id,
         ]);
+
+        $staffUser->notify(new SchedulerCreated($scheduler));
 
         return redirect(route('my-schedule', ['date' => $from->format('Y-m-d')]));
     }
