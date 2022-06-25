@@ -32,8 +32,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-schedule/create', [MyScheduleController::class, 'create'])
         ->name('my-schedule.create');
 
+    Route::get('/my-schedule/{scheduler}/edit', [MyScheduleController::class, 'edit'])
+        ->name('my-schedule.edit');
+
     Route::post('/my-schedule', [MyScheduleController::class, 'store'])
         ->name('my-schedule.store');
+
+    Route::put('/my-schedule/{scheduler}', [MyScheduleController::class, 'update'])
+        ->name('my-schedule.update');
+
+
 
     Route::delete('/my-schedule/{scheduler}', [MyScheduleController::class, 'destroy'])
         ->name('my-schedule.destroy');

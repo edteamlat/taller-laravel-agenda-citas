@@ -34,12 +34,15 @@
                                     </div>
                                     <div>
                                         @can('delete', $schedule)
-                                            <form method="POST" onsubmit="return confirm('¿Realmente deseas cancelar esta cita?')" action="{{ route('my-schedule.destroy', ['scheduler' => $schedule->id]) }}">
+                                            <form method="POST" onsubmit="return confirm('¿Realmente deseas cancelar esta cita?')" action="{{ route('my-schedule.destroy', ['scheduler' => $schedule->id]) }}" class="inline-block">
                                                 @method('DELETE')
                                                 @csrf
                                                 <x-button>Cancelar</x-button>
                                             </form>
                                         @endcan
+                                        <x-link href="{{ route('my-schedule.edit', ['scheduler' => $schedule->id]) }}">
+                                            Reagendar
+                                        </x-link>
                                     </div>
                                 </div>
                             @endforeach

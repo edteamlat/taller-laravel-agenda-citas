@@ -61,6 +61,19 @@ class MyScheduleController extends Controller
 
         return redirect(route('my-schedule', ['date' => $from->format('Y-m-d')]));
     }
+
+    public function edit(Scheduler $scheduler)
+    {
+        $services = Service::all();
+        $staffUsers = User::role('staff')->get();
+
+        return view('my-schedule.edit')->with([
+            'scheduler' => $scheduler,
+            'services' => $services,
+            'staffUsers' => $staffUsers,
+        ]);
+    }
+
     public function destroy(Scheduler $scheduler)
     {
         if (auth()->user()->cannot('delete', $scheduler)) {
