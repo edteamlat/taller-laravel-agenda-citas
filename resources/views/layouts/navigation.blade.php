@@ -16,9 +16,18 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    <x-nav-link href="/my-schedule" :active="request()->routeIs('my-schedule')">
-                        {{ __('Mi agenda') }}
-                    </x-nav-link>
+                    @if (auth()->user()->hasRole('client'))
+                        <x-nav-link href="/my-schedule" :active="request()->routeIs('my-schedule')">
+                            {{ __('Mi agenda') }}
+                        </x-nav-link>
+                    @endif
+
+                    @if (auth()->user()->hasRole('staff'))
+                        <x-nav-link href="{{ route('staff-scheduler.index') }}" :active="request()->routeIs('staff-scheduler.index')">
+                            {{ __('Agenda') }}
+                        </x-nav-link>
+                    @endif
+
                 </div>
             </div>
 

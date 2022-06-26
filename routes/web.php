@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\MyScheduleController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MyScheduleController;
+use App\Http\Controllers\StaffSchedulerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,25 +27,30 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/my-schedule', [MyScheduleController::class, 'index'])
-        ->name('my-schedule');
+    Route::middleware('role:client')
+        ->prefix('/my-schedule')
+        ->group(function () {
+            Route::get('/', [MyScheduleController::class, 'index'])
+                ->name('my-schedule');
 
-    Route::get('/my-schedule/create', [MyScheduleController::class, 'create'])
-        ->name('my-schedule.create');
+            Route::get('/create', [MyScheduleController::class, 'create'])
+                ->name('my-schedule.create');
 
-    Route::get('/my-schedule/{scheduler}/edit', [MyScheduleController::class, 'edit'])
-        ->name('my-schedule.edit');
+            Route::get('/{scheduler}/edit', [MyScheduleController::class, 'edit'])
+                ->name('my-schedule.edit');
 
-    Route::post('/my-schedule', [MyScheduleController::class, 'store'])
-        ->name('my-schedule.store');
+            Route::post('/', [MyScheduleController::class, 'store'])
+                ->name('my-schedule.store');
 
-    Route::put('/my-schedule/{scheduler}', [MyScheduleController::class, 'update'])
-        ->name('my-schedule.update');
+            Route::put('/{scheduler}', [MyScheduleController::class, 'update'])
+                ->name('my-schedule.update');
 
+            Route::delete('/{scheduler}', [MyScheduleController::class, 'destroy'])
+                ->name('my-schedule.destroy');
+        });
 
-
-    Route::delete('/my-schedule/{scheduler}', [MyScheduleController::class, 'destroy'])
-        ->name('my-schedule.destroy');
+    Route::get('/staff-scheduler', [StaffSchedulerController::class, 'index'])
+        ->name('staff-scheduler.index');
 
 });
 

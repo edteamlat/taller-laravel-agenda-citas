@@ -34,4 +34,9 @@ class Scheduler extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function clientUser()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
