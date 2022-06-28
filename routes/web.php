@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\MyScheduleController;
 use App\Http\Controllers\StaffSchedulerController;
 
@@ -49,8 +50,15 @@ Route::middleware('auth')->group(function () {
                 ->name('my-schedule.destroy');
         });
 
-    Route::get('/staff-scheduler', [StaffSchedulerController::class, 'index'])
-        ->name('staff-scheduler.index');
+    Route::middleware('role:staff')->group(function () {
+        Route::get('/staff-scheduler', [StaffSchedulerController::class, 'index'])
+            ->name('staff-scheduler.index');
+    });
+
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/users', [UsersController::class, 'index'])
+            ->name('users.index');
+    });
 
 });
 
