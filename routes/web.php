@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\MyScheduleController;
+use App\Http\Controllers\UsersServicesController;
 use App\Http\Controllers\StaffSchedulerController;
 
 /*
@@ -58,6 +59,12 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::get('/users', [UsersController::class, 'index'])
             ->name('users.index');
+
+        Route::get('/users/{user}/services/edit', [UsersServicesController::class, 'edit'])
+            ->name('users-services.edit');
+
+        Route::put('/users/{user}/services', [UsersServicesController::class, 'update'])
+            ->name('users-services.update');
     });
 
 });

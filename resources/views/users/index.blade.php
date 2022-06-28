@@ -65,7 +65,7 @@
 
                                                 </td>
                                                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                    <x-link href="#">Editar</x-link>
+                                                    <x-link href="{{ route('users-services.edit', ['user' => $user]) }}">Servicios</x-link>
                                                 </td>
                                             </tr>
                                         @endforeach
