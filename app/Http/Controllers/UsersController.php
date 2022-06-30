@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UsersRequest;
 use App\Models\User;
 use App\Models\Service;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use App\Http\Requests\UsersRequest;
 
 class UsersController extends Controller
 {
     public function index()
     {
         $users = User::with('services', 'roles')
-            ->role('staff')
-            ->get();
+            ->paginate(10);
 
         return view('users.index')->with([
             'users' => $users,
@@ -32,7 +32,17 @@ class UsersController extends Controller
 
     public function store(UsersRequest $request)
     {
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt(Str::random(20)),
+        ]);
 
+        $user->roles()->sync($request->input('roles_ids'));
+
+        $user->sendWelcomeEmail();
+
+        return redirect(route('users.index'));
     }
 
     public function edit(User $user)
@@ -49,6 +59,13 @@ class UsersController extends Controller
 
     public function update(UsersRequest $request, User $user)
     {
+        $user->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+        ]);
 
+        $user->roles()->sync($request->input('roles_ids'));
+
+        return redirect(route('users.index'));
     }
 }
