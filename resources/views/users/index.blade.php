@@ -14,12 +14,19 @@
                     <div>
                         <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                             <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+
+                                <x-link class="my-2 mr-4 bg-indigo-500 float-right" href="{{ route('users.create') }}">Nuevo usuario</x-link>
+
                                 <table class="min-w-full leading-normal">
                                     <thead>
                                         <tr>
                                             <th
                                                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                                 Nombre
+                                            </th>
+                                            <th
+                                                class="max-w-[10rem] px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                Tipo
                                             </th>
                                             <th
                                                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -44,8 +51,17 @@
                                                             <p class="text-gray-900 whitespace-no-wrap">
                                                                 {{ $user->name }}
                                                             </p>
+                                                            <div class="block text-xs text-indigo-600">{{ $user->email }}</div>
                                                         </div>
                                                     </div>
+                                                </td>
+                                                <td class="max-w-[10rem] px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    @foreach ($user->roles as $role)
+                                                        <span class="relative inline-block mb-1 px-3 py-1 font-semibold text-green-900 leading-tight">
+                                                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                                                            <span class="relative">{{ $role->name }}</span>
+                                                        </span>
+                                                    @endforeach
                                                 </td>
                                                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                     @foreach ($user->services as $service)
@@ -65,6 +81,7 @@
 
                                                 </td>
                                                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    <x-link href="{{ route('users.edit', ['user' => $user->id]) }}">Editar</x-link>
                                                     <x-link href="{{ route('users-services.edit', ['user' => $user]) }}">Servicios</x-link>
                                                 </td>
                                             </tr>
