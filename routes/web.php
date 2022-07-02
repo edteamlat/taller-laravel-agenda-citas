@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\MyScheduleController;
+use App\Http\Controllers\OpeningHoursController;
 use App\Http\Controllers\UsersServicesController;
 use App\Http\Controllers\StaffSchedulerController;
 
@@ -77,6 +78,12 @@ Route::middleware('auth')->group(function () {
 
         Route::put('/users/{user}/services', [UsersServicesController::class, 'update'])
             ->name('users-services.update');
+
+        Route::get('/opening-hours/edit', [OpeningHoursController::class, 'edit'])
+            ->name('opening-hours.edit');
+
+        Route::put('/opening-hours/update', [OpeningHoursController::class, 'update'])
+            ->name('opening-hours.update');
     });
 
 });
