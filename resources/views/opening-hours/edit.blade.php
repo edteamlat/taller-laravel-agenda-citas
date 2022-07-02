@@ -12,6 +12,11 @@
                 <div class="p-6 bg-white border-b border-gray-200">
 
                     <x-auth-validation-errors></x-auth-validation-errors>
+                    @if (session()->has('success'))
+                        <div class="p-4 my-2 bg-green-300 border-2 border-green-600 rounded">
+                            {{ session('success') }}
+                        </div>
+                    @endif
                     <form action="{{ route('opening-hours.update') }}" method="POST">
                         @method('PUT')
                         @csrf

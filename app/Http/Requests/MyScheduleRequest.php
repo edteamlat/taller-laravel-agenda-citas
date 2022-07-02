@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Business\StaffServiceChecker;
 use App\Business\StaffAvailabilityChecker;
 use App\Business\ClientAvailabilityChecker;
+use App\Business\OpeningHourChecker;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MyScheduleRequest extends FormRequest
@@ -50,6 +51,11 @@ class MyScheduleRequest extends FormRequest
             ->check()) {
             abort(back()->withErrors("{$staffUser->name} no presta el servicio de {$service->name}.")->withInput());
         }
+
+        if (!(new OpeningHourChecker($from, $to))
+            ->check()) {
+            abort(back()->withErrors("La reservación está fuera del horario de atención.")->withInput());
+        }
     }
 
     public function checkRescheduleRules($scheduler, $staffUser, $clientUser, $from, $to, $service)
@@ -69,6 +75,11 @@ class MyScheduleRequest extends FormRequest
         if (!(new StaffServiceChecker($staffUser, $service))
             ->check()) {
             abort(back()->withErrors("{$staffUser->name} no presta el servicio de {$service->name}.")->withInput());
+        }
+
+        if (!(new OpeningHourChecker($from, $to))
+            ->check()) {
+            abort(back()->withErrors("La reservación está fuera del horario de atención.")->withInput());
         }
     }
 }

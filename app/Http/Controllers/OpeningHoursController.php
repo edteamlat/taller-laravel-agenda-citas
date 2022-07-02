@@ -19,6 +19,17 @@ class OpeningHoursController extends Controller
 
     public function update(OpeningHourRequest $request)
     {
-        // dd(request()->all());
+        $closeHours = $request->input('close');
+        foreach ($request->input('open') as $day => $hour) {
+            OpeningHour::where('day', $day)
+                ->update([
+                    'open' => $hour,
+                    'close' => $closeHours[$day]
+                ]);
+        }
+
+        $request->session()->flash('success', 'Los horarios se actualizaron.');
+
+        return back();
     }
 }
