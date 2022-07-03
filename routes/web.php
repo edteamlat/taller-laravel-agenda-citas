@@ -55,6 +55,9 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:staff')->group(function () {
         Route::get('/staff-scheduler', [StaffSchedulerController::class, 'index'])
             ->name('staff-scheduler.index');
+
+        Route::delete('/staff-scheduler/{scheduler}', [StaffSchedulerController::class, 'destroy'])
+            ->name('staff-scheduler.destroy');
     });
 
     Route::middleware('role:admin')->group(function () {

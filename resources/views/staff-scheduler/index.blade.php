@@ -33,14 +33,14 @@
                                         <div>Desde <span class="font-bold">{{ $schedule->from->format('H:i') }}</span> hasta <span class="font-bold">{{ $schedule->to->format('H:i') }}</span></div>
                                     </div>
                                     <div>
-                                        {{-- @can('delete', $schedule)
-                                            <form method="POST" onsubmit="return confirm('¿Realmente deseas cancelar esta cita?')" action="{{ route('my-schedule.destroy', ['scheduler' => $schedule->id]) }}" class="inline-block">
+                                        {{-- @can('delete', $schedule) --}}
+                                            <form method="POST" onsubmit="return confirm('¿Realmente deseas cancelar esta cita?')" action="{{ route('staff-scheduler.destroy', ['scheduler' => $schedule->id]) }}" class="inline-block">
                                                 @method('DELETE')
                                                 @csrf
-                                                <x-button>Cancelar</x-button>
+                                                <x-button :disabled="auth()->user()->cannot('delete', $schedule)">Cancelar</x-button>
                                             </form>
-                                        @endcan
-                                        <x-link href="{{ route('my-schedule.edit', ['scheduler' => $schedule->id]) }}">
+                                        {{-- @endcan --}}
+                                        {{-- <x-link href="{{ route('my-schedule.edit', ['scheduler' => $schedule->id]) }}">
                                             Reagendar
                                         </x-link> --}}
                                     </div>

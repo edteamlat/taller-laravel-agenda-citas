@@ -73,7 +73,11 @@ class SchedulerPolicy
             return false;
         }
 
-        if ($scheduler->client_user_id != $user->id) {
+        if (($scheduler->client_user_id != $user->id) AND ($scheduler->staff_user_id != $user->id)) {
+            return false;
+        }
+
+        if ($scheduler->from->diffInHours() < 24) {
             return false;
         }
 
