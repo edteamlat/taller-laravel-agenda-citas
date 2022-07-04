@@ -33,16 +33,14 @@
                                         <div>Desde <span class="font-bold">{{ $schedule->from->format('H:i') }}</span> hasta <span class="font-bold">{{ $schedule->to->format('H:i') }}</span></div>
                                     </div>
                                     <div>
-                                        {{-- @can('delete', $schedule) --}}
-                                            <form method="POST" onsubmit="return confirm('¿Realmente deseas cancelar esta cita?')" action="{{ route('staff-scheduler.destroy', ['scheduler' => $schedule->id]) }}" class="inline-block">
-                                                @method('DELETE')
-                                                @csrf
-                                                <x-button :disabled="auth()->user()->cannot('delete', $schedule)">Cancelar</x-button>
-                                            </form>
-                                        {{-- @endcan --}}
-                                        {{-- <x-link href="{{ route('my-schedule.edit', ['scheduler' => $schedule->id]) }}">
+                                        <form method="POST" onsubmit="return confirm('¿Realmente deseas cancelar esta cita?')" action="{{ route('staff-scheduler.destroy', ['scheduler' => $schedule->id]) }}" class="inline-block">
+                                            @method('DELETE')
+                                            @csrf
+                                            <x-button :disabled="auth()->user()->cannot('delete', $schedule)">Cancelar</x-button>
+                                        </form>
+                                        <x-link :disabled="auth()->user()->cannot('update', $schedule)" href="{{ route('staff-scheduler.edit', ['scheduler' => $schedule->id]) }}">
                                             Reagendar
-                                        </x-link> --}}
+                                        </x-link>
                                     </div>
                                 </div>
                             @endforeach

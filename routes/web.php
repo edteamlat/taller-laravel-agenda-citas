@@ -56,6 +56,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/staff-scheduler', [StaffSchedulerController::class, 'index'])
             ->name('staff-scheduler.index');
 
+        Route::get('/staff-scheduler/{scheduler}/edit', [StaffSchedulerController::class, 'edit'])
+            ->name('staff-scheduler.edit');
+
+        Route::put('/staff-scheduler/{scheduler}', [StaffSchedulerController::class, 'update'])
+            ->name('staff-scheduler.update');
+
         Route::delete('/staff-scheduler/{scheduler}', [StaffSchedulerController::class, 'destroy'])
             ->name('staff-scheduler.destroy');
     });
