@@ -13,7 +13,9 @@ class StaffSchedulerController extends Controller
     {
         $date = Carbon::parse(request()->input('date'));
 
-        $dayScheduler = Scheduler::where('staff_user_id', auth()->id())
+        $dayScheduler = Scheduler::when(!auth()->user()->hasRole('admin'), function ($query){
+                $query->where('staff_user_id', auth()->id());
+            })
             ->whereDate('from', $date->format('Y-m-d'))
             ->orderBy('from', 'ASC')
             ->get();
@@ -46,7 +48,7 @@ class StaffSchedulerController extends Controller
         $from = Carbon::parse(request('from.date') . ' ' . request('from.time'));
         $to = Carbon::parse($from)->addMinutes($service->duration);
 
-        $request->checkRescheduleRules($scheduler, auth()->user(), $scheduler->clientUser, $from, $to, $service);
+        $request->checkRescheduleRules($scheduler, $scheduler->staffUser, $scheduler->clientUser, $from, $to, $service);
 
         $scheduler->update([
             'from' => $from,
