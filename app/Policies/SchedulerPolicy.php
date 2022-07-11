@@ -53,12 +53,12 @@ class SchedulerPolicy
      */
     public function update(User $user, Scheduler $scheduler)
     {
-        if (($scheduler->client_user_id == $user->id) OR ($scheduler->staff_user_id == $user->id)) {
-            return true;
-        }
-
         if ($scheduler->from->diffInHours() < 24) {
             return false;
+        }
+
+        if (($scheduler->client_user_id == $user->id) OR ($scheduler->staff_user_id == $user->id)) {
+            return true;
         }
 
         return null;
@@ -77,12 +77,12 @@ class SchedulerPolicy
             return false;
         }
 
-        if (($scheduler->client_user_id == $user->id) OR ($scheduler->staff_user_id == $user->id)) {
-            return true;
-        }
-
         if ($scheduler->from->diffInHours() < 24) {
             return false;
+        }
+
+        if (($scheduler->client_user_id == $user->id) OR ($scheduler->staff_user_id == $user->id)) {
+            return true;
         }
 
         return null;
