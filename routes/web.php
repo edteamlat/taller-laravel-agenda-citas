@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\MyScheduleController;
+use App\Http\Controllers\ImpersonateController;
 use App\Http\Controllers\OpeningHoursController;
 use App\Http\Controllers\UsersServicesController;
 use App\Http\Controllers\StaffSchedulerController;
@@ -66,7 +67,13 @@ Route::middleware('auth')->group(function () {
             ->name('staff-scheduler.destroy');
     });
 
+    Route::get('/impersonate/out', [ImpersonateController::class, 'out'])
+        ->name('impersonate.out');
+
     Route::middleware('role:admin')->group(function () {
+        Route::get('/impersonate/{user}', [ImpersonateController::class, 'in'])
+            ->name('impersonate.in');
+
         Route::get('/users', [UsersController::class, 'index'])
             ->name('users.index');
 

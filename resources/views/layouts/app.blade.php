@@ -29,6 +29,13 @@
                 </div>
             </header>
 
+            @if (session()->has('impersonate'))
+                <div class="max-w-7xl mt-5 mx-auto sm:px-6 lg:px-8">
+                    <div class="text-center px-4 py-3 rounded shadow-lg bg-indigo-500 text-white">
+                        Has iniciado sesión como el usuario {{ auth()->user()->name }}. <a href="{{ route('impersonate.out') }}" class="font-bold">Volver a mi usuario &rarr;</a>
+                    </div>
+                </div>
+            @endif
             <!-- Page Content -->
             <main>
                 {{ $slot }}
